@@ -1,10 +1,13 @@
 const bcrypt = require('bcrypt'); // Crypter les données
 const jwt = require('jsonwebtoken');
 
-const User = require('../models/user');
+const User = require('../models/user');// Importation du modele User
 
+// Créer un compte
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10) //Plus la valeur est élevée plus l'exécution de la fonction sera longue, plus ce sera sécurisé
+  
+//Plus la valeur est élevée plus l'exécution de la fonction sera longue, plus ce sera sécurisé
+    bcrypt.hash(req.body.password, 10) 
       .then(hash => {
         const user = new User({ // Creation de l'user 
           email: req.body.email,
@@ -17,6 +20,7 @@ exports.signup = (req, res, next) => {
       .catch(error => res.status(500).json({ error }));
   };
 
+// Se connecter en disposant d'un TOKEN valide  
   exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email }) // renvoie une Promise
       .then(user => {
