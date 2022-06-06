@@ -4,7 +4,13 @@ const multer = require('multer');
 const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
-  'image/png': 'png'
+  'image/png': 'png',
+  'image/gif': 'gif',
+  'image/webp': 'webp',
+  'image/svg+xml': 'svg',
+  'image/tiff': 'tiff',
+  'image/bmp': 'bmp',
+  'image/x-icon': 'ico',
 };
 
 // storage pour indiquer à multer où enregistrer les fichiers entrants

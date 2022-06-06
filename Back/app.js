@@ -3,11 +3,11 @@ const mongoose = require('mongoose'); // Importation de Mongoose
 
 // Importation d'helmet pour protéger les vulnérabilités connues d'express 
 const helmet = require('helmet');
+
 const cors = require('cors');
 
 const userRoutes = require('./routes/user');// Importation des routes User
 
-//
 const path = require('path');
 
 const app = express();
@@ -20,6 +20,7 @@ mongoose.connect('mongodb+srv://TenzaRemy:_DFR.59.remy@apifullstack.bmusk.mongod
   .then(() => console.log('Connexion à MongoDB réussie ! Votre API est à présent connectée à votre base de données'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
+// intercepte la requete et la transforme au bon format (remplace app.use(bodyParser.json()) par app.use(express.json()))
 app.use(express.json());
 
 // contre sécurité CORS puisque de base le site qui utilise l'API doit uniquement  des requêtes vers la même origine que celle ci
