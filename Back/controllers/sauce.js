@@ -6,25 +6,19 @@ const fs = require('fs');
 // Lire toutes les sauces
 exports.getAllSauces = (req, res, next) => {
     Sauce.find()
-    .then((Sauces) => {
-        res.status(200).json(Sauces);
-      })
-      .catch((error) => {
-        res.status(400).json({error: error});
-      }
-    );
+    .then((Sauces) => {res.status(200).json(Sauces);})
+
+      .catch((error) => {res.status(400).json({error: error});
+      });
   };
 
 // Lire une sauce
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({_id: req.params.id})
-    .then((Sauce) => {
-        res.status(200).json(Sauce);
-      })
-      .catch((error) => {
-        res.status(404).json({error: error});
-      }
-    );
+    .then((Sauce) => {res.status(200).json(Sauce);})
+
+      .catch((error) => {res.status(404).json({error: error});
+      });
   };
 
 // Créer une sauce
@@ -33,7 +27,10 @@ exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;
     const sauce = new Sauce({
-        ...sauceObject, // // L'opérateur spread prend l'intégralité des éléments dans le req.body.sauce
+
+        // L'opérateur spread prend l'intégralité des éléments dans le req.body.sauce
+        ...sauceObject, 
+
         // Pour l'URL de l'image utilisons req.protocol pour obtenir le premier segment (dans notre cas 'http' ). 
         // Nous ajoutons '://' , puis utilisons req.get('host') pour résoudre l'hôte du serveur (ici, 'localhost:3000' ). 
         // Nous ajoutons finalement '/images/' et le nom de fichier pour compléter notre URL.
@@ -45,16 +42,10 @@ exports.createSauce = (req, res, next) => {
         usersliked: [],
         usersdisliked: [],
     });
-    sauce.save()
-    .then(() => {
-        res.status(201).json({
-            message: 'Sauce enregistrée !'
-        });
+    Sauce.save()
+    .then(() => {res.status(201).json({message: 'Sauce enregistrée !'});
     })
-    .catch((error) => {
-        res.status(400).json({
-            error: error
-        });
+    .catch((error) => {res.status(400).json({ error: error});
     });
 }
 
