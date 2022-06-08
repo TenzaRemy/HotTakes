@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-
+const auth = require('../middleware/auth'); // J'importe le middleware auth
+const multer = require('../middleware/multer-config'); // J'importe le middleware multer
 const sauceCtrl = require('../controllers/sauce');
 
 //Renvoie un tableau de toutes les sauces de la base de données.
@@ -20,7 +21,7 @@ router.put('/:id', auth, sauceCtrl.modifySauce);
 // Supprime la sauce avec l'_id fourni
 router.delete('/:id', auth, sauceCtrl.deleteSauce);
 
-// 
+// Création du statut like pour la sauce avec l'_id fourni
 router.post('/:id/like', auth, sauceCtrl.likeSauce);
 
 // Pour pouvoir exporter le router

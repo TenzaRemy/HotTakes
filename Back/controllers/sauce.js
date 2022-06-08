@@ -49,3 +49,26 @@ exports.createSauce = (req, res, next) => {
     });
 }
 
+// Modifier une sauce
+exports.modifySauce = (req, res, next) => {
+    const sauceObject = req.file ?
+    {
+        ...JSON.parse(req.body.sauce),
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    } : {...req.body};
+    if (req.file) { 
+      Sauce.findOne({ _id: req.params.id }) // // Trouve un objet correspondant à l'id de la requête
+      .then(sauce => {
+          const filename = sauce.imageUrl.split('/images/')[1]; // retourne un tableau de deux éléments le deuxième étant le nom du fichier.
+          fs.unlink(`images/${filename}`, () => { // supprime le fichier à l'aide de la fonction unlink
+          });
+      })
+      // message d'erreur si la récupération de la sauce n'a pu être faite
+      .catch(error => res.status(500).json({ error }));
+  }
+    Sauce.updateOne({_id: req.params.id}, {$set: sauceObject})
+    .then(() => {res.status(200).json({message: 'Sauce modifiée !'});
+    })
+    .catch((error) => {res.status(400).json({ error: error});
+    });
+}
