@@ -7,7 +7,7 @@ const User = require('../models/user');// Importation du modele User
 exports.signup = (req, res, next) => {
   
 //Plus la valeur est élevée plus l'exécution de la fonction sera longue, plus ce sera sécurisé
-    bcrypt.hash(req.body.password, 10) 
+    bcrypt.hash(req.body.password, 10) // Hashage du mot de passe avant l'enregistrement dans la base de données (10 = nombre de fois que le mot de passe sera hashé)
       .then(hash => {
         const user = new User({ // Creation de l'user 
           email: req.body.email,

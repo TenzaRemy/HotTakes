@@ -57,10 +57,10 @@ exports.modifySauce = (req, res, next) => {
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : {...req.body};
     if (req.file) { 
-      Sauce.findOne({ _id: req.params.id }) // // Trouve un objet correspondant à l'id de la requête
+      Sauce.findOne({ _id: req.params.id }) // On récupère la sauce à modifier qui correspond à l'id de la requête
       .then(sauce => {
-          const filename = sauce.imageUrl.split('/images/')[1]; // retourne un tableau de deux éléments le deuxième étant le nom du fichier.
-          fs.unlink(`images/${filename}`, () => { // supprime le fichier à l'aide de la fonction unlink
+          const filename = sauce.imageUrl.split('/images/')[1]; // On récupère le nom du fichier à supprimer 
+          fs.unlink(`images/${filename}`, () => { // fs.unlink pour supprimer le fichier
           });
       })
       // message d'erreur si la récupération de la sauce n'a pu être faite
@@ -72,3 +72,18 @@ exports.modifySauce = (req, res, next) => {
     .catch((error) => {res.status(400).json({ error: error});
     });
 }
+
+// Supprimer une sauce
+exports.deleteSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+      .then(sauce => {
+        // On cherche le fichier correspondant à l'URL et on le supprime
+        const filename = sauce.imageUrl.split('/images/')[1];
+        fs.unlink(`images/${filename}`, () => {
+          Sauce.deleteOne({ _id: req.params.id })
+            .then(() => res.status(200).json({ message: 'Sauce supprimé !'}))
+            .catch(error => res.status(400).json({ error }));
+        });
+      })
+      .catch(error => res.status(500).json({ error }));
+  }; 
