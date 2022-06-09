@@ -87,3 +87,28 @@ exports.deleteSauce = (req, res, next) => {
       })
       .catch(error => res.status(500).json({ error }));
   }; 
+
+// Statut "like" et "dislike" d'une sauce 
+exports.likeSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+      .then(sauce => {
+        // On vérifie si l'utilisateur n'a pas déjà liké la sauce 
+        if (sauce.usersliked.includes(req.body.userId)) { 
+          res.status(400).json({ error: 'Vous avez déjà liké cette sauce !' }); 
+        } else { 
+          Sauce.updateOne({ _id: req.params.id }, { $inc: { like: 1 }, $push: { usersliked: req.body.userId } })
+            .then(() => res.status(200).json({ message: 'Sauce likée !' }))
+            .catch(error => res.status(400).json({ error }));
+        }
+        // On vérifie aussi si l'utilisateur n'a pas déjà disliké la sauce
+        if (sauce.usersdisliked.includes(req.body.userId)) {
+            res.status(400).json({ error: 'Vous avez déjà disliké cette sauce !' });
+         } else { 
+         Sauce.updateOne({ _id: req.params.id }, { $inc: { dislike: 1 }, $push: { usersdisliked: req.body.userId } })
+            .then(() => res.status(200).json({ message: 'Sauce dislikée !' }))
+            .catch(error => res.status(400).json({ error }));
+            }
+            }) 
+        .catch(error => res.status(500).json({ error }));
+        }
+

@@ -7,6 +7,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 
 const userRoutes = require('./routes/user');// Importation des routes User
+const sauceRoutes = require('./routes/sauce');// Importation des routes Sauce
 
 const path = require('path');
 
@@ -31,6 +32,7 @@ app.use(helmet());
 // Chemin statique ajouté à l'application pour fournir les images
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes); 
 
 module.exports = app;
