@@ -1,36 +1,36 @@
-const express = require('express'); // Importation d'express
-const mongoose = require('mongoose'); // Importation de Mongoose
+const express = require('express');
+const bodyParser = require('body-parser')
+const mongoose = require('mongoose');
 
-// Importation d'helmet pour protéger les vulnérabilités connues d'express 
-const helmet = require('helmet');
+// Pour travailler avec des fichiers et chemin d'accés 
+const path = require('path'); 
 
-const cors = require('cors');
+// Importations des routes
+const sauceRoutes = require('./routes/sauces');
+const userRoutes = require('./routes/user') ;
 
-const userRoutes = require('./routes/user');// Importation des routes User
-const sauceRoutes = require('./routes/sauce');// Importation des routes Sauce
-
-const path = require('path');
-
-const app = express();
-
-// Connecter l'API à la base de données MongoDB
 mongoose.connect('mongodb+srv://TenzaRemy:_DFR.59.remy@apifullstack.bmusk.mongodb.net/?retryWrites=true&w=majority',
-  { useNewUrlParser: true,
-    useUnifiedTopology: true })
-    // Permet de savoir si la connexion est réussie ou échouée avec un message dans la console
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .then(() => console.log('Connexion à MongoDB réussie ! Votre API est à présent connectée à votre base de données'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-// intercepte la requete et la transforme au bon format (remplace app.use(bodyParser.json()) par app.use(express.json()))
-app.use(express.json());
+const app = express();
 
-// contre sécurité CORS puisque de base le site qui utilise l'API doit uniquement  des requêtes vers la même origine que celle ci
-app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.setHeader('Content-Security-Policy', "default-src 'self'");
+  next();
+});
 
-app.use(helmet());
+// Ajout bodyParser sinon les images ne s'affichent pas
+app.use(bodyParser.json());
 
-// Chemin statique ajouté à l'application pour fournir les images
-app.use(express.static(path.join(__dirname, "public")));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes); 
