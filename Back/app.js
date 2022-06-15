@@ -5,6 +5,17 @@ const mongoose = require('mongoose');
 // Permet d'ajouter des variables d'environnements dont seulement l'adminitrateur a accès
 require('dotenv').config();
 
+// package evitant les attaques par injections 
+const sanitizer = require('express-auto-sanitize')
+
+const options = {
+    query: Boolean,
+    body: Boolean,
+    cookies: Boolean,
+    original: Boolean, // will keep the original version in req.original
+    sanitizerFunction: Function // use your personnal sanitizing algorithm
+}
+
 // Pour travailler avec des fichiers et chemin d'accés 
 const path = require('path'); 
 
@@ -32,6 +43,8 @@ app.use((req, res, next) => {
   res.setHeader('Content-Security-Policy', "default-src 'self'");
   next();
 });
+
+app.use(sanitizer(options))
 
 // Ajout bodyParser sinon les images ne s'affichent pas
 app.use(bodyParser.json());
