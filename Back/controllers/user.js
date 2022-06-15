@@ -6,7 +6,7 @@ const User = require('../models/user');// Importation du modele User
 // Créer un compte
 exports.signup = (req, res, next) => {
   
-//Plus la valeur est élevée plus l'exécution de la fonction sera longue, plus ce sera sécurisé
+// Plus la valeur est élevée plus l'exécution de la fonction sera longue, plus ce sera sécurisé
     bcrypt.hash(req.body.password, 10) 
       .then(hash => {
         const user = new User({ // Creation de l'user 
@@ -15,7 +15,7 @@ exports.signup = (req, res, next) => {
         });
         user.save() // User enregistré dans la base de donnée
           .then(() => res.status(201).json({ message: 'Utilisateur crée !' }))
-          .catch(error => res.status(400).json({ error }));
+          .catch(error => res.status(400).json({ error: 'Adresse Email déjà utilisée' }));
       })
       .catch(error => res.status(500).json({ error }));
   };
