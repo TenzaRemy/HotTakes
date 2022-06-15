@@ -2,6 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 
+// Permet d'ajouter des variables d'environnements dont seulement l'adminitrateur a accès
+require('dotenv').config();
+
 // Pour travailler avec des fichiers et chemin d'accés 
 const path = require('path'); 
 
@@ -9,7 +12,10 @@ const path = require('path');
 const sauceRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user') ;
 
-mongoose.connect('mongodb+srv://TenzaRemy:_DFR.59.remy@apifullstack.bmusk.mongodb.net/?retryWrites=true&w=majority',
+// variables d'environnements permettant de sécuriser la connexion à la base de données
+const MongoDB = process.env.MongoDB_Connection
+
+mongoose.connect(MongoDB,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
