@@ -4,7 +4,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `ng serve` for a dev server from the front folder. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files. Then for the back `npm install` and `nodemon server`. Be sure that you connect with your database MongoDB. Or else there is an error message to aware you.
 
 ## Code scaffolding
 
